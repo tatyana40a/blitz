@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Блиц-зачёт по общей химии</title>
+<style>
+:root{
+  --bg:#0d1320;--panel:#151d2d;--card:#1b2538;--border:#2c3b57;
+  --text:#f5f7fb;--muted:#9fb0c7;--violet:#8b5cf6;--lime:#b8f34a;
+  --cyan:#47c8ef;--red:#ff7474;--amber:#ffc857;--green:#6dde87;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;background:
+  radial-gradient(circle at 10% 0%,rgba(139,92,246,.14),transparent 28%),
+  radial-gradient(circle at 95% 100%,rgba(71,200,239,.10),transparent 30%),var(--bg);
+  color:var(--text);font-family:Inter,Manrope,Arial,sans-serif;
+}
+button{font:inherit}
+.app{max-width:1050px;margin:auto;padding:24px 18px 42px}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.eyebrow{color:var(--cyan);text-transform:uppercase;font-size:12px;font-weight:900;letter-spacing:.09em}
+h1{margin:5px 0 5px;font-size:clamp(26px,4vw,40px)}
+.sub{color:var(--muted);line-height:1.45}
+.badge{white-space:nowrap;border:1px solid rgba(184,243,74,.3);color:var(--lime);background:rgba(184,243,74,.08);padding:9px 12px;border-radius:999px;font-weight:850}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:10px 12px}
+.stat-name{font-size:11px;color:var(--muted);line-height:1.25}
+.stat-score{font-weight:900;margin-top:3px}
+.progress-shell{height:8px;background:#202b40;border-radius:99px;overflow:hidden;margin-bottom:16px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan));transition:.2s}
+.topic-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.topic-nav-label{font-size:12px;color:var(--muted);font-weight:800;margin-right:2px}
+.topic-jump{background:var(--panel);color:#dbe5f3;border:1px solid var(--border);border-radius:999px;padding:8px 11px;cursor:pointer;font-weight:800;font-size:12px}
+.topic-jump:hover{border-color:var(--cyan);color:white}
+.topic-jump.active{background:rgba(71,200,239,.12);border-color:rgba(71,200,239,.55);color:#bdefff}
+.card{
+  background:linear-gradient(145deg,#1b2538,#151d2d);border:1px solid var(--border);
+  border-radius:24px;padding:26px;box-shadow:0 18px 52px rgba(0,0,0,.26)
+}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.pill{font-size:12px;font-weight:800;border:1px solid var(--border);color:var(--muted);padding:6px 10px;border-radius:99px}
+.pill.skill{color:#d9cfff;background:rgba(139,92,246,.10);border-color:rgba(139,92,246,.25)}
+.counter{margin-left:auto}
+.screen-title{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900;margin-bottom:13px}
+.main-text{font-size:clamp(22px,3.2vw,34px);line-height:1.35;font-weight:850;min-height:210px;display:flex;align-items:center;white-space:pre-line}
+.answer-text{
+  font-size:clamp(20px,2.7vw,29px);line-height:1.45;font-weight:760;
+  min-height:210px;display:flex;align-items:center;white-space:pre-line
+}
+.primary-row{display:flex;justify-content:center;margin-top:18px}
+.btn{
+  border-radius:14px;min-height:50px;padding:11px 18px;cursor:pointer;font-weight:900;border:1px solid var(--border)
+}
+.reveal{background:var(--violet);border-color:var(--violet);color:white;min-width:220px}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px}
+.ghost{background:transparent;color:var(--muted)}
+.ghost:hover{color:white;border-color:#4b6085}
+.rating{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:18px}
+.yes{background:rgba(109,222,135,.13);border-color:rgba(109,222,135,.45);color:#baf5c7}
+.partial{background:rgba(255,200,87,.13);border-color:rgba(255,200,87,.48);color:#ffe09a}
+.no{background:rgba(255,116,116,.13);border-color:rgba(255,116,116,.45);color:#ffc0c0}
+.issue-box{margin-top:16px;padding:16px;border-radius:15px;border:1px solid var(--border);background:#111827}
+.issue-title{font-weight:850;margin-bottom:10px}
+.issue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.issue{
+  display:flex;align-items:center;gap:9px;min-height:43px;padding:9px 10px;border:1px solid var(--border);
+  border-radius:11px;color:#dbe5f3;background:#151d2d
+}
+.issue input{width:18px;height:18px}
+.save-issue{margin-top:12px;background:var(--cyan);border-color:var(--cyan);color:#061118;width:100%}
+.results{display:none}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.result{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:15px}
+.rhead{display:flex;justify-content:space-between;gap:10px}
+.rpct{font-size:24px;font-weight:950}
+.pass{color:var(--green)} .fail{color:var(--red)}
+.verdict{margin-top:14px;border:1px solid var(--border);border-radius:15px;padding:17px;font-size:19px;font-weight:900;line-height:1.45}
+.problem-list{margin-top:16px}
+.problem-list h3{margin-bottom:8px}
+.problem-list ul{line-height:1.55;color:#d9e3ef;padding-left:20px}
+.feedback-wrap{margin-top:22px}
+.feedback-topic{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:12px}
+.feedback-topic h3{margin:0 0 10px;font-size:18px}
+.feedback-section{margin-top:10px}
+.feedback-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:900;margin-bottom:4px}
+.feedback-text{line-height:1.5;color:#e8eef7}
+.recommend{margin-top:10px;padding:10px 12px;border-radius:12px;background:#111827;border:1px solid var(--border);line-height:1.45}
+.issue-summary{margin-top:18px;background:#111827;border:1px solid var(--border);border-radius:15px;padding:15px}
+.issue-summary ul{margin:8px 0 0;padding-left:20px;line-height:1.55}
+.hidden{display:none!important}
+@media(max-width:720px){
+  .header{flex-direction:column}.stats{grid-template-columns:repeat(2,1fr)}
+  .rating{grid-template-columns:1fr}.issue-grid{grid-template-columns:1fr}
+  .main-text,.answer-text{min-height:170px}.result-grid{grid-template-columns:1fr}
+}
+
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100dvh;overflow-x:hidden}
+button,input{font:inherit}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.home-link{
+  display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;
+  padding:10px 14px;border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;color:#dfe7ff;text-decoration:none;
+  background:rgba(255,255,255,.04);font-weight:700;
+}
+@media(max-width:760px){
+  .wrap,.container{width:100%!important;max-width:100%!important;padding-left:16px!important;padding-right:16px!important}
+  h1{font-size:32px!important;line-height:1.08!important}
+  button{min-height:46px}
+}
+@media(max-width:480px){
+  h1{font-size:27px!important}
+  .home-link{width:100%;justify-content:center;box-sizing:border-box}
+}
+
+</style>
+</head>
+<body>
+<a class="home-link" href="index.html">← К выбору блица</a>
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="eyebrow">Онлайн-зачёт · блиц</div>
+      <h1>Общая химия</h1>
+      <div class="sub">Вопрос → краткий ответ → оценка. «Частично» считается как 0,5 балла. Для зачёта нужно ≥80% в каждой теме.</div>
+    </div>
+    <div class="badge">Порог: 80%</div>
+  </div>
+
+  <div id="stats" class="stats"></div>
+  <div class="progress-shell"><div id="progress" class="progress"></div></div>
+
+  <div class="topic-nav" aria-label="Переход к разделу">
+    <span class="topic-nav-label">Перейти к разделу:</span>
+    <button type="button" class="topic-jump" data-topic="Строение атома">01 · Строение атома</button>
+    <button type="button" class="topic-jump" data-topic="Периодический закон">02 · Периодический закон</button>
+    <button type="button" class="topic-jump" data-topic="Химическая связь">03 · Химическая связь</button>
+    <button type="button" class="topic-jump" data-topic="ОВР">04 · ОВР</button>
+  </div>
+
+  <section id="quiz" class="card">
+    <div class="meta">
+      <span id="topic" class="pill"></span>
+      <span id="skill" class="pill skill"></span>
+      <span id="count" class="pill counter"></span>
+    </div>
+
+    <div id="questionScreen">
+      <div class="screen-title">Вопрос</div>
+      <div id="question" class="main-text"></div>
+      <div class="primary-row">
+        <button id="showAnswer" class="btn reveal" type="button">Показать краткий ответ →</button>
+      </div>
+    </div>
+
+    <div id="answerScreen" class="hidden">
+      <div class="screen-title">Краткий ответ</div>
+      <div id="answer" class="answer-text"></div>
+
+      <div class="rating">
+        <button class="btn no rate" data-score="0" type="button">✕ Нет</button>
+        <button class="btn partial rate" data-score="0.5" type="button">◐ Частично верно</button>
+        <button class="btn yes rate" data-score="1" type="button">✓ Да</button>
+      </div>
+
+      <div id="issueBox" class="issue-box hidden">
+        <div class="issue-title">Где была проблема?</div>
+        <div class="issue-grid">
+          <label class="issue"><input type="checkbox" value="Не знает правило"> Не знает правило</label>
+          <label class="issue"><input type="checkbox" value="Не умеет применить"> Не умеет применить</label>
+          <label class="issue"><input type="checkbox" value="Ошибка в расчёте/знаке"> Ошибка в расчёте / знаке</label>
+          <label class="issue"><input type="checkbox" value="Невнимательность"> Невнимательность</label>
+          <label class="issue"><input type="checkbox" value="Терминология/формулировка"> Терминология / формулировка</label>
+          <label class="issue"><input type="checkbox" value="Другое"> Другое</label>
+        </div>
+        <button id="saveIssue" class="btn save-issue" type="button">Сохранить и дальше →</button>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button id="back" class="btn ghost" type="button">← Назад</button>
+      <button id="skip" class="btn ghost" type="button">Пропустить →</button>
+    </div>
+  </section>
+
+  <section id="results" class="results">
+    <div class="card">
+      <div class="eyebrow">Итог</div>
+      <h2>Результаты блица</h2>
+      <div id="resultGrid" class="result-grid"></div>
+      <div id="verdict" class="verdict"></div>
+      <div id="problems" class="problem-list"></div>
+      <div id="feedback" class="feedback-wrap"></div>
+      <div class="primary-row">
+        <button id="restart" class="btn ghost" type="button">Начать заново</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const Q = [
+["Строение атома","Состав частицы","Для ⁵⁶Fe³⁺ определи число протонов, нейтронов и электронов.","p = 26; n = 30; e = 23."],
+["Строение атома","Конфигурация атома","Запиши полную электронную конфигурацию атома Cl.","1s² 2s² 2p⁶ 3s² 3p⁵."],
+["Строение атома","Конфигурация иона","Запиши электронную конфигурацию иона Cl⁻.\nЧто изменилось при образовании иона?","1s² 2s² 2p⁶ 3s² 3p⁶.\nАтом принял 1 электрон."],
+["Строение атома","Определение элемента","Дана внешняя конфигурация 3s²3p³.\nОпредели элемент.","P — фосфор."],
+["Строение атома","Анализ конфигурации","Для 3s²3p³ назови период, группу, число электронов на внешнем уровне и число неспаренных электронов.","3 период; 15 группа; 5 внешних электронов; 3 неспаренных."],
+["Строение атома","Валентность","Для Cl изобрази электронно-графическую схему внешнего уровня и определи валентность в основном состоянии.","3s²3p⁵: 1 неспаренный электрон → валентность I."],
+["Строение атома","Возбуждённые состояния","Покажи возможные возбуждённые состояния Cl и назови возможные валентности.","Возможные валентности Cl: I, III, V, VII."],
+
+["Периодический закон","Тип элемента","Na, Cl, Fe — определи: s-, p- или d-элемент.","Na — s; Cl — p; Fe — d."],
+["Периодический закон","Семейства","К каким семействам относятся Li, Sr, I и Ne?","Li — щелочной; Sr — щелочноземельный; I — галоген; Ne — благородный газ."],
+["Периодический закон","Степени окисления","Для Se назови высшую и низшую степени окисления.","+6 и −2."],
+["Периодический закон","Высшая валентность","Назови высшую валентность Se.\nКакие классические исключения нужно помнить для правила «высшая валентность = номер группы»?","Se — VI. Исключения: O, F, N."],
+["Периодический закон","Атомный радиус","Расположи Si, Cl, Na, Mg в порядке УВЕЛИЧЕНИЯ атомного радиуса.","Cl < Si < Mg < Na."],
+["Периодический закон","Электроотрицательность","Расположи Si, P, Cl в порядке УВЕЛИЧЕНИЯ электроотрицательности.","Si < P < Cl."],
+["Периодический закон","Свойства элементов","Быстро сравни:\n• у кого выше ЭО — O или S?\n• сильнее металлические свойства — K или Na?\n• сильнее неметаллические свойства — Br или Cl?","O; K; Cl."],
+["Периодический закон","Оксид и гидроксид","Для Si составь формулы высшего оксида и соответствующего гидроксида. Определи их характер.","SiO₂ — кислотный оксид; H₂SiO₃ — кислота."],
+["Периодический закон","Изменение свойств","Na₂O → MgO → Al₂O₃ → SiO₂ → P₂O₅\nКак изменяются основные и кислотные свойства? Где амфотерность?","Основные ослабевают, кислотные усиливаются. Al₂O₃ — амфотерный."],
+
+["Химическая связь","Тип связи","Определи тип связи в N₂, NH₃, CaF₂ и Cu.","N₂ — ковалентная неполярная; NH₃ — ковалентная полярная; CaF₂ — ионная; Cu — металлическая."],
+["Химическая связь","Несколько типов связи","Какие типы химической связи присутствуют в NH₄NO₃?","Ионная; ковалентная полярная; в NH₄⁺ одна связь образована по донорно-акцепторному механизму."],
+["Химическая связь","Донорно-акцепторная","Назови известные тебе частицы или вещества, где есть связь, образованная по донорно-акцепторному механизму.","Примеры: NH₄⁺, H₃O⁺, CO."],
+["Химическая связь","Донор и акцептор","На одном из названных примеров объясни: кто донор электронной пары, а кто акцептор?","NH₃ + H⁺: N — донор пары, H⁺ — акцептор.\nH₂O + H⁺: O — донор, H⁺ — акцептор."],
+["Химическая связь","Кратные связи","Выбери вещества с кратной связью:\nH₂, O₂, N₂, HCl, CO₂, NH₃.\nСколько общих электронных пар образует каждая кратная связь?","O₂ — двойная, 2 пары; N₂ — тройная, 3 пары; CO₂ — две двойные C=O, по 2 пары."],
+["Химическая связь","Порядок связи","Расположи C–C, C=C, C≡C сначала в порядке увеличения длины, затем в порядке увеличения прочности.","Длина: C≡C < C=C < C–C.\nПрочность: C–C < C=C < C≡C."],
+["Химическая связь","Водородная связь","Между молекулами каких веществ возможна водородная связь:\nHF, CH₄, CH₃OH, NH₃, H₂S?","HF, CH₃OH, NH₃."],
+["Химическая связь","Температура кипения","У какого вещества выше температура кипения: Cl₂ или I₂? Почему?","I₂: с ростом размера и молярной массы усиливаются межмолекулярные взаимодействия."],
+["Химическая связь","водородная связь и tкип","У какого вещества выше температура кипения: H₂O или H₂S? Почему?","H₂O — из-за межмолекулярных водородных связей."],
+["Химическая связь","Строение и tпл","У какого вещества выше температура плавления: CO₂ или SiO₂? Почему?","SiO₂: атомная кристаллическая решётка; CO₂ — молекулярное вещество."],
+["Химическая связь","Молекулярность","Раздели SO₂, SiO₂, KCl, S₈, SiC на вещества молекулярного и немолекулярного строения.","Молекулярные: SO₂, S₈.\nНемолекулярные: SiO₂, KCl, SiC."],
+["Химическая связь","Тип решётки","Для SiO₂, KCl и SiC назови тип кристаллической решётки.","SiO₂ — атомная; KCl — ионная; SiC — атомная."],
+["Химическая связь","Решётка по свойствам","Твёрдое хрупкое вещество; расплав проводит ток, твёрдое — нет. Какая решётка?","Ионная."],
+["Химическая связь","Решётка по свойствам","Очень твёрдое и тугоплавкое вещество, не проводит электрический ток даже в расплавленном состоянии. Какая решётка?","Атомная."],
+["Химическая связь","Решётка по свойствам","Пластичное, проводит электрический ток, имеет металлический блеск. Какая решётка?","Металлическая."],
+["Химическая связь","Решётка по свойствам","Легкоплавкое, летучее, электрический ток не проводит. Какая решётка?","Молекулярная."],
+["Химическая связь","Атомная решётка","За 20 секунд назови не менее 5 веществ или простых веществ с атомной кристаллической решёткой.","Например: алмаз, графит, Si, SiO₂, SiC, B."],
+
+["ОВР","Степени окисления","Определи СО Cl в Cl₂ и HClO₄.","0 и +7."],
+["ОВР","Исключения","Определи СО:\n• O в Na₂O₂\n• O в OF₂\n• H в CaH₂","−1; +2; −1."],
+["ОВР","Электронный переход","Cr⁺⁶ → Cr⁺³\nСколько электронов? Принятие или отдача? Окисление или восстановление?","Принятие 3e⁻; восстановление."],
+["ОВР","Электронный переход","S⁻² → S⁺⁴\nСколько электронов? Принятие или отдача? Окисление или восстановление?","Отдача 6e⁻; окисление."],
+["ОВР","ОВР или нет","AgNO₃ + NaCl → AgCl + NaNO₃\nОпредели, ОВР это или нет, и обоснуй. Если это ОВР — найди окислитель и восстановитель.","Не ОВР: степени окисления не изменяются. Окислителя и восстановителя нет."],
+["ОВР","ОВР или нет","2KClO₃ → 2KCl + 3O₂\nОпредели, ОВР это или нет, и обоснуй. Если это ОВР — найди окислитель и восстановитель.","ОВР: Cl +5 → −1 — восстановление, O −2 → 0 — окисление. Окислитель и восстановитель находятся в составе KClO₃: Cl(+5) — окислитель, O(−2) — восстановитель."],
+["ОВР","ОВР или нет","CaO + H₂O → Ca(OH)₂\nОпредели, ОВР это или нет, и обоснуй. Если это ОВР — найди окислитель и восстановитель.","Не ОВР: степени окисления не изменяются. Окислителя и восстановителя нет."],
+["ОВР","Окислитель и восстановитель","Fe + CuSO₄ → FeSO₄ + Cu\nЧто окисляется и восстанавливается? Назови окислитель и восстановитель.","Fe⁰ → Fe²⁺ — окисление, Fe — восстановитель. Cu²⁺ → Cu⁰ — восстановление, Cu²⁺ — окислитель."],
+["ОВР","Электронный баланс","H₂S + HNO₃ → S + NO + H₂O\nОпредели изменяющиеся СО и составь электронный баланс.","S: −2 → 0, отдаёт 2e⁻. N: +5 → +2, принимает 3e⁻. НОК = 6."],
+["ОВР","Коэффициенты","H₂S + HNO₃ → S + NO + H₂O\nНазови окислитель, восстановитель и расставь коэффициенты.","3H₂S + 2HNO₃ → 3S + 2NO + 4H₂O.\nОкислитель — HNO₃; восстановитель — H₂S."]
+];
+
+const topics=["Строение атома","Периодический закон","Химическая связь","ОВР"];
+let idx=0;
+let stage="q";
+let results=Array(Q.length).fill(null);
+let issues=Array(Q.length).fill(null);
+let pendingScore=null;
+
+const $=id=>document.getElementById(id);
+
+function pctTopic(t){
+  const ids=Q.map((x,i)=>x[0]===t?i:-1).filter(i=>i>=0);
+  const done=ids.filter(i=>results[i]!==null);
+  const score=done.reduce((s,i)=>s+(results[i]??0),0);
+  return {score,max:ids.length,pct:ids.length?Math.round(score/ids.length*100):0,done:done.length};
+}
+function renderStats(){
+  $("stats").innerHTML=topics.map(t=>{
+    const p=pctTopic(t);
+    return `<div class="stat"><div class="stat-name">${t}</div><div class="stat-score">${p.score}/${p.max} · ${p.pct}%</div></div>`;
+  }).join("");
+}
+function render(){
+  if(idx>=Q.length){showResults();return;}
+  const q=Q[idx];
+  $("topic").textContent=q[0];
+  document.querySelectorAll(".topic-jump").forEach(b=>b.classList.toggle("active", b.dataset.topic===q[0]));
+  $("skill").textContent=q[1];
+  $("count").textContent=(idx+1)+" / "+Q.length;
+  $("question").textContent=q[2];
+  $("answer").textContent=q[3];
+  $("progress").style.width=((idx)/Q.length*100)+"%";
+  $("back").disabled=idx===0;
+  $("issueBox").classList.add("hidden");
+  document.querySelectorAll(".issue input").forEach(x=>x.checked=false);
+  pendingScore=null;
+  if(stage==="q"){
+    $("questionScreen").classList.remove("hidden");
+    $("answerScreen").classList.add("hidden");
+  }else{
+    $("questionScreen").classList.add("hidden");
+    $("answerScreen").classList.remove("hidden");
+  }
+  renderStats();
+}
+function next(){
+  idx++;
+  stage="q";
+  render();
+}
+function rate(score){
+  if(score===1){
+    results[idx]=1; issues[idx]=[]; next();
+  }else{
+    pendingScore=score;
+    $("issueBox").classList.remove("hidden");
+  }
+}
+function showResults(){
+  $("quiz").classList.add("hidden");
+  $("results").style.display="block";
+  $("progress").style.width="100%";
+  let all=true, total=0, max=0;
+
+  const topicData = {};
+  topics.forEach(t=>{
+    const ids=Q.map((x,i)=>x[0]===t?i:-1).filter(i=>i>=0);
+    const score=ids.reduce((s,i)=>s+(results[i]??0),0);
+    const pct=Math.round(score/ids.length*100);
+    topicData[t]={ids,score,pct,max:ids.length};
+  });
+
+  $("resultGrid").innerHTML=topics.map(t=>{
+    const d=topicData[t];
+    const pass=d.pct>=80; if(!pass)all=false;
+    total+=d.score; max+=d.max;
+    return `<div class="result"><div class="rhead"><b>${t}</b><span class="rpct">${d.pct}%</span></div><div>${d.score}/${d.max}</div><div class="${pass?'pass':'fail'}"><b>${pass?'✓ Сдано':'✕ Ниже 80%'}</b></div></div>`;
+  }).join("");
+
+  $("verdict").innerHTML=`Общий результат: ${total}/${max} · ${Math.round(total/max*100)}%<br>${all?'✓ ЗАЧЁТ СДАН — каждая тема ≥80%.':'✕ ЗАЧЁТ НЕ СДАН — хотя бы одна тема ниже 80%.'}`;
+
+  const bad=Q.map((q,i)=>({q,i})).filter(x=>results[x.i]!==1);
+  if(bad.length){
+    $("problems").innerHTML="<h3>Что проседает</h3><ul>"+bad.map(x=>{
+      const sc=results[x.i]===0.5?"частично":"нет";
+      const is=(issues[x.i]||[]).join(", ")||"причина не отмечена";
+      return `<li><b>${x.q[0]} · ${x.q[1]}</b> — ${sc}; ${is}</li>`;
+    }).join("")+"</ul>";
+  } else $("problems").innerHTML="";
+
+  // Aggregate issue reasons
+  const issueCounts={};
+  issues.forEach(arr=>(arr||[]).forEach(v=>{
+    if(v==="Пропущено") return;
+    issueCounts[v]=(issueCounts[v]||0)+1;
+  }));
+  const issueItems=Object.entries(issueCounts).sort((a,b)=>b[1]-a[1]);
+
+  // Topic feedback
+  const feedbackBlocks = topics.map(t=>{
+    const d=topicData[t];
+    const strongSkills=[...new Set(d.ids.filter(i=>results[i]===1).map(i=>Q[i][1]))];
+    const weakSkills=[...new Set(d.ids.filter(i=>results[i]!==1).map(i=>Q[i][1]))];
+
+    let intro, rec;
+    if(d.pct>=80){
+      intro="Тема зачтена. Базовые умения по этому разделу в целом сформированы.";
+      rec="Обычное повторение достаточно. Перед следующим зачётом стоит быстро пройти только отмеченные слабые места.";
+    } else if(d.pct>=60){
+      intro="Тема пока не зачтена, но большая часть базовых умений уже есть.";
+      rec="Точечно повторить проблемные навыки и затем перепройти этот раздел.";
+    } else {
+      intro="Тема требует повторения: ошибок слишком много для уверенного применения материала.";
+      rec="Сначала повторить основные правила и алгоритмы по теме, затем снова пройти блиц по этому разделу.";
+    }
+
+    const strong = strongSkills.length ? strongSkills.join(", ") : "пока нет навыков, выполненных полностью верно";
+    const weak = weakSkills.length ? weakSkills.join(", ") : "существенных слабых мест не выявлено";
+
+    return `<div class="feedback-topic">
+      <h3>${t} — ${d.pct}%</h3>
+      <div class="feedback-text">${intro}</div>
+      <div class="feedback-section">
+        <div class="feedback-label">Сильные стороны</div>
+        <div class="feedback-text">${strong}</div>
+      </div>
+      <div class="feedback-section">
+        <div class="feedback-label">Что повторить</div>
+        <div class="feedback-text">${weak}</div>
+      </div>
+      <div class="recommend"><b>Что делать дальше:</b> ${rec}</div>
+    </div>`;
+  }).join("");
+
+  let issueSummary="";
+  if(issueItems.length){
+    issueSummary=`<div class="issue-summary">
+      <div class="feedback-label">Почему возникали ошибки</div>
+      <ul>${issueItems.map(([name,count])=>`<li>${name} — ${count}</li>`).join("")}</ul>
+    </div>`;
+  }
+
+  $("feedback").innerHTML=`<h2 style="margin-top:0">Обратная связь после зачёта</h2>${feedbackBlocks}${issueSummary}`;
+}
+document.querySelectorAll(".topic-jump").forEach(btn=>btn.addEventListener("click",()=>{
+  const target=Q.findIndex(q=>q[0]===btn.dataset.topic);
+  if(target>=0){
+    idx=target;
+    stage="q";
+    $("results").style.display="none";
+    $("quiz").classList.remove("hidden");
+    render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+}));
+$("restart").addEventListener("click",()=>{
+  idx=0;stage="q";results=Array(Q.length).fill(null);issues=Array(Q.length).fill(null);
+  $("results").style.display="none";$("quiz").classList.remove("hidden");render();
+});
+render();
+</script>
+</body>
+</html>

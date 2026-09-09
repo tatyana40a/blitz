@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ЦТ · Диагностические блицы</title>
+<style>
+:root{--bg:#0d1220;--panel:#151d31;--panel2:#1b2540;--text:#eef3ff;--muted:#9aa8c5;--violet:#9b7cff;--cyan:#59d7ff;--lime:#b8f15a;--line:#2b3652}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;min-height:100dvh;background:radial-gradient(circle at top left,rgba(155,124,255,.13),transparent 30%),radial-gradient(circle at top right,rgba(89,215,255,.10),transparent 28%),linear-gradient(180deg,#0b1020,#10182a);color:var(--text);font-family:Inter,Manrope,Arial,sans-serif}
+.wrap{width:min(1000px,100%);margin:auto;padding:42px max(18px,env(safe-area-inset-right)) max(34px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+h1{margin:9px 0 12px;font-size:46px;line-height:1.05}
+.sub{max-width:760px;color:var(--muted);line-height:1.55;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:28px}
+.card{display:block;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,var(--panel),var(--panel2));color:var(--text);text-decoration:none;transition:.2s ease;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.card:hover{transform:translateY(-2px);border-color:var(--violet)}
+.num{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:30px;padding:0 10px;border-radius:999px;background:rgba(155,124,255,.14);border:1px solid rgba(155,124,255,.35);color:#dcd2ff;font-weight:800;font-size:12px}
+.card h2{margin:16px 0 8px;font-size:24px}
+.card p{margin:0;color:var(--muted);line-height:1.45}
+.badge{display:inline-block;margin-top:18px;font-size:12px;font-weight:800;color:var(--lime)}
+.note{margin-top:22px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;color:var(--muted);background:rgba(255,255,255,.03);font-size:13px}
+@media(max-width:700px){.wrap{padding-top:24px}h1{font-size:32px}.grid{grid-template-columns:1fr}.card{min-height:auto}}
+@media(max-width:480px){h1{font-size:28px}.sub{font-size:14px}.card{padding:18px}.card h2{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="eyebrow">ЦТ · диагностический блиц</div>
+<h1>Выбери блиц</h1>
+<div class="sub">Короткая диагностика по ключевым навыкам общей химии. Преподаватель задаёт вопрос, ученик отвечает устно, после чего фиксируется результат и причина ошибки.</div>
+<div class="grid">
+<a class="card" href="blitz2.html">
+<span class="num">02</span>
+<h2>Блиц №2 · Общая химия</h2>
+<p>Строение атома · Периодический закон · Химическая связь и строение вещества · ОВР.</p>
+<span class="badge">Открыть блиц →</span>
+</a>
+</div>
+<div class="note">Следующие варианты блица можно будет добавлять сюда отдельными карточками — с теми же компетенциями, но новыми примерами.</div>
+</div>
+</body>
+</html>
