@@ -80,46 +80,15 @@ h1{margin:5px 0 5px;font-size:clamp(26px,4vw,40px)}
 .problem-list{margin-top:16px}
 .problem-list h3{margin-bottom:8px}
 .problem-list ul{line-height:1.55;color:#d9e3ef;padding-left:20px}
-.feedback-wrap{margin-top:22px}
-.feedback-topic{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:12px}
-.feedback-topic h3{margin:0 0 10px;font-size:18px}
-.feedback-section{margin-top:10px}
-.feedback-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:900;margin-bottom:4px}
-.feedback-text{line-height:1.5;color:#e8eef7}
-.recommend{margin-top:10px;padding:10px 12px;border-radius:12px;background:#111827;border:1px solid var(--border);line-height:1.45}
-.issue-summary{margin-top:18px;background:#111827;border:1px solid var(--border);border-radius:15px;padding:15px}
-.issue-summary ul{margin:8px 0 0;padding-left:20px;line-height:1.55}
 .hidden{display:none!important}
 @media(max-width:720px){
   .header{flex-direction:column}.stats{grid-template-columns:repeat(2,1fr)}
   .rating{grid-template-columns:1fr}.issue-grid{grid-template-columns:1fr}
   .main-text,.answer-text{min-height:170px}.result-grid{grid-template-columns:1fr}
 }
-
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{min-height:100dvh;overflow-x:hidden}
-button,input{font:inherit}
-button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.home-link{
-  display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;
-  padding:10px 14px;border:1px solid rgba(255,255,255,.14);
-  border-radius:12px;color:#dfe7ff;text-decoration:none;
-  background:rgba(255,255,255,.04);font-weight:700;
-}
-@media(max-width:760px){
-  .wrap,.container{width:100%!important;max-width:100%!important;padding-left:16px!important;padding-right:16px!important}
-  h1{font-size:32px!important;line-height:1.08!important}
-  button{min-height:46px}
-}
-@media(max-width:480px){
-  h1{font-size:27px!important}
-  .home-link{width:100%;justify-content:center;box-sizing:border-box}
-}
-
 </style>
 </head>
 <body>
-<a class="home-link" href="index.html">← К выбору блица</a>
 <div class="app">
   <div class="header">
     <div>
@@ -193,7 +162,6 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
       <div id="resultGrid" class="result-grid"></div>
       <div id="verdict" class="verdict"></div>
       <div id="problems" class="problem-list"></div>
-      <div id="feedback" class="feedback-wrap"></div>
       <div class="primary-row">
         <button id="restart" class="btn ghost" type="button">Начать заново</button>
       </div>
@@ -313,24 +281,15 @@ function showResults(){
   $("results").style.display="block";
   $("progress").style.width="100%";
   let all=true, total=0, max=0;
-
-  const topicData = {};
-  topics.forEach(t=>{
+  $("resultGrid").innerHTML=topics.map(t=>{
     const ids=Q.map((x,i)=>x[0]===t?i:-1).filter(i=>i>=0);
     const score=ids.reduce((s,i)=>s+(results[i]??0),0);
     const pct=Math.round(score/ids.length*100);
-    topicData[t]={ids,score,pct,max:ids.length};
-  });
-
-  $("resultGrid").innerHTML=topics.map(t=>{
-    const d=topicData[t];
-    const pass=d.pct>=80; if(!pass)all=false;
-    total+=d.score; max+=d.max;
-    return `<div class="result"><div class="rhead"><b>${t}</b><span class="rpct">${d.pct}%</span></div><div>${d.score}/${d.max}</div><div class="${pass?'pass':'fail'}"><b>${pass?'✓ Сдано':'✕ Ниже 80%'}</b></div></div>`;
+    const pass=pct>=80; if(!pass)all=false;
+    total+=score; max+=ids.length;
+    return `<div class="result"><div class="rhead"><b>${t}</b><span class="rpct">${pct}%</span></div><div>${score}/${ids.length}</div><div class="${pass?'pass':'fail'}"><b>${pass?'✓ Сдано':'✕ Ниже 80%'}</b></div></div>`;
   }).join("");
-
   $("verdict").innerHTML=`Общий результат: ${total}/${max} · ${Math.round(total/max*100)}%<br>${all?'✓ ЗАЧЁТ СДАН — каждая тема ≥80%.':'✕ ЗАЧЁТ НЕ СДАН — хотя бы одна тема ниже 80%.'}`;
-
   const bad=Q.map((q,i)=>({q,i})).filter(x=>results[x.i]!==1);
   if(bad.length){
     $("problems").innerHTML="<h3>Что проседает</h3><ul>"+bad.map(x=>{
@@ -339,61 +298,16 @@ function showResults(){
       return `<li><b>${x.q[0]} · ${x.q[1]}</b> — ${sc}; ${is}</li>`;
     }).join("")+"</ul>";
   } else $("problems").innerHTML="";
-
-  // Aggregate issue reasons
-  const issueCounts={};
-  issues.forEach(arr=>(arr||[]).forEach(v=>{
-    if(v==="Пропущено") return;
-    issueCounts[v]=(issueCounts[v]||0)+1;
-  }));
-  const issueItems=Object.entries(issueCounts).sort((a,b)=>b[1]-a[1]);
-
-  // Topic feedback
-  const feedbackBlocks = topics.map(t=>{
-    const d=topicData[t];
-    const strongSkills=[...new Set(d.ids.filter(i=>results[i]===1).map(i=>Q[i][1]))];
-    const weakSkills=[...new Set(d.ids.filter(i=>results[i]!==1).map(i=>Q[i][1]))];
-
-    let intro, rec;
-    if(d.pct>=80){
-      intro="Тема зачтена. Базовые умения по этому разделу в целом сформированы.";
-      rec="Обычное повторение достаточно. Перед следующим зачётом стоит быстро пройти только отмеченные слабые места.";
-    } else if(d.pct>=60){
-      intro="Тема пока не зачтена, но большая часть базовых умений уже есть.";
-      rec="Точечно повторить проблемные навыки и затем перепройти этот раздел.";
-    } else {
-      intro="Тема требует повторения: ошибок слишком много для уверенного применения материала.";
-      rec="Сначала повторить основные правила и алгоритмы по теме, затем снова пройти блиц по этому разделу.";
-    }
-
-    const strong = strongSkills.length ? strongSkills.join(", ") : "пока нет навыков, выполненных полностью верно";
-    const weak = weakSkills.length ? weakSkills.join(", ") : "существенных слабых мест не выявлено";
-
-    return `<div class="feedback-topic">
-      <h3>${t} — ${d.pct}%</h3>
-      <div class="feedback-text">${intro}</div>
-      <div class="feedback-section">
-        <div class="feedback-label">Сильные стороны</div>
-        <div class="feedback-text">${strong}</div>
-      </div>
-      <div class="feedback-section">
-        <div class="feedback-label">Что повторить</div>
-        <div class="feedback-text">${weak}</div>
-      </div>
-      <div class="recommend"><b>Что делать дальше:</b> ${rec}</div>
-    </div>`;
-  }).join("");
-
-  let issueSummary="";
-  if(issueItems.length){
-    issueSummary=`<div class="issue-summary">
-      <div class="feedback-label">Почему возникали ошибки</div>
-      <ul>${issueItems.map(([name,count])=>`<li>${name} — ${count}</li>`).join("")}</ul>
-    </div>`;
-  }
-
-  $("feedback").innerHTML=`<h2 style="margin-top:0">Обратная связь после зачёта</h2>${feedbackBlocks}${issueSummary}`;
 }
+$("showAnswer").addEventListener("click",()=>{stage="a";render();});
+document.querySelectorAll(".rate").forEach(b=>b.addEventListener("click",()=>rate(Number(b.dataset.score))));
+$("saveIssue").addEventListener("click",()=>{
+  results[idx]=pendingScore;
+  issues[idx]=[...document.querySelectorAll(".issue input:checked")].map(x=>x.value);
+  next();
+});
+$("skip").addEventListener("click",()=>{results[idx]=0;issues[idx]=["Пропущено"];next();});
+$("back").addEventListener("click",()=>{if(idx>0){idx--;stage="q";render();}});
 document.querySelectorAll(".topic-jump").forEach(btn=>btn.addEventListener("click",()=>{
   const target=Q.findIndex(q=>q[0]===btn.dataset.topic);
   if(target>=0){
