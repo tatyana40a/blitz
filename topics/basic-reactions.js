@@ -1,5 +1,5 @@
-window.ZACHET_DATA=window.ZACHET_DATA||[];
-window.ZACHET_DATA.push(...[
+window.ZACHET_TOPIC_DATA=window.ZACHET_TOPIC_DATA||{};
+window.ZACHET_TOPIC_DATA["basic-reactions"]=[
   [
     "Базовые реакции",
     "Основные оксиды + вода",
@@ -84,4 +84,4 @@ window.ZACHET_DATA.push(...[
     "Даны вещества:\n\nCuSO₄ · Ag · Ni · NaOH · BaCl₂ · H₂SO₄ · Fe₂O₃\n\nСколько пар веществ реагирует между собой? Назови реагирующие пары и предскажи продукты.",
     "7 пар:\n\nCuSO₄ + Ni → NiSO₄ + Cu\nCuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄\nCuSO₄ + BaCl₂ → BaSO₄↓ + CuCl₂\nNi + H₂SO₄ → NiSO₄ + H₂↑\n2NaOH + H₂SO₄ → Na₂SO₄ + 2H₂O\nBaCl₂ + H₂SO₄ → BaSO₄↓ + 2HCl\nFe₂O₃ + 3H₂SO₄ → Fe₂(SO₄)₃ + 3H₂O\n\nAg с веществами из данного набора не реагирует."
   ]
-]);
+];

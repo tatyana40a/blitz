@@ -1,5 +1,5 @@
-window.ZACHET_DATA=window.ZACHET_DATA||[];
-window.ZACHET_DATA.push(...[
+window.ZACHET_TOPIC_DATA=window.ZACHET_TOPIC_DATA||{};
+window.ZACHET_TOPIC_DATA["periodic-law"]=[
   [
     "Периодический закон",
     "Тип элемента",
@@ -54,4 +54,4 @@ window.ZACHET_DATA.push(...[
     "Na₂O → MgO → Al₂O₃ → SiO₂ → P₂O₅\nКак изменяются основные и кислотные свойства? Где амфотерность?",
     "Основные ослабевают, кислотные усиливаются. Al₂O₃ — амфотерный."
   ]
-]);
+];

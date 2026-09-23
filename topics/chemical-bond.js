@@ -1,5 +1,5 @@
-window.ZACHET_DATA=window.ZACHET_DATA||[];
-window.ZACHET_DATA.push(...[
+window.ZACHET_TOPIC_DATA=window.ZACHET_TOPIC_DATA||{};
+window.ZACHET_TOPIC_DATA["chemical-bond"]=[
   [
     "Химическая связь",
     "Тип связи",
@@ -102,4 +102,4 @@ window.ZACHET_DATA.push(...[
     "За 20 секунд назови не менее 5 веществ или простых веществ с атомной кристаллической решёткой.",
     "Например: алмаз, графит, Si, SiO₂, SiC, B."
   ]
-]);
+];

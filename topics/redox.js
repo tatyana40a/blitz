@@ -1,5 +1,5 @@
-window.ZACHET_DATA=window.ZACHET_DATA||[];
-window.ZACHET_DATA.push(...[
+window.ZACHET_TOPIC_DATA=window.ZACHET_TOPIC_DATA||{};
+window.ZACHET_TOPIC_DATA["redox"]=[
   [
     "ОВР",
     "Степени окисления",
@@ -60,4 +60,4 @@ window.ZACHET_DATA.push(...[
     "H₂S + HNO₃ → S + NO + H₂O\nНазови окислитель, восстановитель и расставь коэффициенты.",
     "3H₂S + 2HNO₃ → 3S + 2NO + 4H₂O.\nОкислитель — HNO₃; восстановитель — H₂S."
   ]
-]);
+];

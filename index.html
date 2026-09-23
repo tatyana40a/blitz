@@ -210,17 +210,23 @@ h1{margin:5px 0 5px;font-size:clamp(26px,4vw,40px)}
   </div>
 </div>
 
-<script src="topics.js"></script>
+<script src="topics.js?v=4"></script>
 <script>
-const ALL_Q = window.ZACHET_DATA || [];
-const GENERAL_TOPICS = (window.ZACHET_SECTIONS||[]).flatMap(s=>s.topics.map(t=>t.title));
+let ALL_Q = [];
+let GENERAL_TOPICS = [];
+const TOPIC_META = {};
+window.ZACHET_TOPIC_DATA = window.ZACHET_TOPIC_DATA || {};
 const $=id=>document.getElementById(id);
 let Q=[], topics=[], idx=0, stage="q", results=[], issues=[], pendingScore=null;
 
 function buildStart(){
+  GENERAL_TOPICS=[];
+  (window.ZACHET_SECTIONS||[]).forEach(sec=>(sec.topics||[]).forEach(topic=>{
+    GENERAL_TOPICS.push(topic.title); TOPIC_META[topic.title]=topic;
+  }));
   $("sectionGrid").innerHTML=(window.ZACHET_SECTIONS||[]).map((sec,i)=>{
     const body=sec.topics.length ? sec.topics.map(topic=>{
-      const n=ALL_Q.filter(q=>q[0]===topic.title).length;
+      const n=(window.ZACHET_TOPIC_DATA[topic.id]||[]).length;
       return `<label class="topic-choice"><input type="checkbox" class="topic-check" value="${topic.title}"> <span><b>${topic.title}</b><br><small>${n} карточек</small></span></label>`;
     }).join("") : `<div class="empty-section">Темы пока не добавлены.</div>`;
     return `<div class="section-card ${i===0?"active-section":""}">
@@ -229,6 +235,23 @@ function buildStart(){
   }).join("");
   document.querySelectorAll(".topic-check").forEach(x=>x.addEventListener("change",updateStart));
   updateStart();
+}
+function loadScript(src){
+  return new Promise((resolve,reject)=>{
+    const s=document.createElement("script");
+    s.src=src+(src.includes("?")?"&":"?")+"v=4";
+    s.onload=resolve; s.onerror=reject; document.head.appendChild(s);
+  });
+}
+async function bootstrap(){
+  try{
+    const files=(window.ZACHET_SECTIONS||[]).flatMap(sec=>(sec.topics||[]).map(t=>t.file));
+    await Promise.all(files.map(loadScript));
+    ALL_Q=Object.values(window.ZACHET_TOPIC_DATA).flat();
+    buildStart();
+  }catch(err){
+    $("sectionGrid").innerHTML='<div class="section-card"><div class="section-name">Ошибка загрузки тем</div><div class="empty-section">Проверьте наличие topics.js и папки topics на GitHub.</div></div>';
+  }
 }
 function selected(){return [...document.querySelectorAll(".topic-check:checked")].map(x=>x.value)}
 function updateStart(){
@@ -296,6 +319,6 @@ $("restart").addEventListener("click",()=>{
  $("quizApp").classList.add("hidden");$("startScreen").classList.remove("hidden");
  $("resultScreen").classList.add("hidden");$("quiz").classList.remove("hidden");
 });
-buildStart();
+bootstrap();
 </script>
 </body></html>

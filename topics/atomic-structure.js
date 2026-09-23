@@ -1,5 +1,5 @@
-window.ZACHET_DATA=window.ZACHET_DATA||[];
-window.ZACHET_DATA.push(...[
+window.ZACHET_TOPIC_DATA=window.ZACHET_TOPIC_DATA||{};
+window.ZACHET_TOPIC_DATA["atomic-structure"]=[
   [
     "Строение атома",
     "Состав частицы",
@@ -42,4 +42,4 @@ window.ZACHET_DATA.push(...[
     "Покажи возможные возбуждённые состояния Cl и назови возможные валентности.",
     "Возможные валентности Cl: I, III, V, VII."
   ]
-]);
+];
