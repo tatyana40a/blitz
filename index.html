@@ -2,43 +2,300 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ЦТ · Диагностические блицы</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Конструктор зачёта · Химия</title>
 <style>
-:root{--bg:#0d1220;--panel:#151d31;--panel2:#1b2540;--text:#eef3ff;--muted:#9aa8c5;--violet:#9b7cff;--cyan:#59d7ff;--lime:#b8f15a;--line:#2b3652}
+:root{
+  --bg:#0d1320;--panel:#151d2d;--card:#1b2538;--border:#2c3b57;
+  --text:#f5f7fb;--muted:#9fb0c7;--violet:#8b5cf6;--lime:#b8f34a;
+  --cyan:#47c8ef;--red:#ff7474;--amber:#ffc857;--green:#6dde87;
+}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;min-height:100dvh;background:radial-gradient(circle at top left,rgba(155,124,255,.13),transparent 30%),radial-gradient(circle at top right,rgba(89,215,255,.10),transparent 28%),linear-gradient(180deg,#0b1020,#10182a);color:var(--text);font-family:Inter,Manrope,Arial,sans-serif}
-.wrap{width:min(1000px,100%);margin:auto;padding:42px max(18px,env(safe-area-inset-right)) max(34px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
-.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
-h1{margin:9px 0 12px;font-size:46px;line-height:1.05}
-.sub{max-width:760px;color:var(--muted);line-height:1.55;font-size:16px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:28px}
-.card{display:block;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,var(--panel),var(--panel2));color:var(--text);text-decoration:none;transition:.2s ease;box-shadow:0 18px 50px rgba(0,0,0,.18)}
-.card:hover{transform:translateY(-2px);border-color:var(--violet)}
-.num{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:30px;padding:0 10px;border-radius:999px;background:rgba(155,124,255,.14);border:1px solid rgba(155,124,255,.35);color:#dcd2ff;font-weight:800;font-size:12px}
-.card h2{margin:16px 0 8px;font-size:24px}
-.card p{margin:0;color:var(--muted);line-height:1.45}
-.badge{display:inline-block;margin-top:18px;font-size:12px;font-weight:800;color:var(--lime)}
-.note{margin-top:22px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;color:var(--muted);background:rgba(255,255,255,.03);font-size:13px}
-@media(max-width:700px){.wrap{padding-top:24px}h1{font-size:32px}.grid{grid-template-columns:1fr}.card{min-height:auto}}
-@media(max-width:480px){h1{font-size:28px}.sub{font-size:14px}.card{padding:18px}.card h2{font-size:21px}}
+body{
+  margin:0;min-height:100vh;background:
+  radial-gradient(circle at 10% 0%,rgba(139,92,246,.14),transparent 28%),
+  radial-gradient(circle at 95% 100%,rgba(71,200,239,.10),transparent 30%),var(--bg);
+  color:var(--text);font-family:Inter,Manrope,Arial,sans-serif;
+}
+button{font:inherit}
+.app{max-width:1050px;margin:auto;padding:24px 18px 42px}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.eyebrow{color:var(--cyan);text-transform:uppercase;font-size:12px;font-weight:900;letter-spacing:.09em}
+h1{margin:5px 0 5px;font-size:clamp(26px,4vw,40px)}
+.sub{color:var(--muted);line-height:1.45}
+.badge{white-space:nowrap;border:1px solid rgba(184,243,74,.3);color:var(--lime);background:rgba(184,243,74,.08);padding:9px 12px;border-radius:999px;font-weight:850}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:10px 12px}
+.stat-name{font-size:11px;color:var(--muted);line-height:1.25}
+.stat-score{font-weight:900;margin-top:3px}
+.progress-shell{height:8px;background:#202b40;border-radius:99px;overflow:hidden;margin-bottom:16px}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan));transition:.2s}
+.topic-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.topic-nav-label{font-size:12px;color:var(--muted);font-weight:800;margin-right:2px}
+.topic-jump{background:var(--panel);color:#dbe5f3;border:1px solid var(--border);border-radius:999px;padding:8px 11px;cursor:pointer;font-weight:800;font-size:12px}
+.topic-jump:hover{border-color:var(--cyan);color:white}
+.topic-jump.active{background:rgba(71,200,239,.12);border-color:rgba(71,200,239,.55);color:#bdefff}
+.card{
+  background:linear-gradient(145deg,#1b2538,#151d2d);border:1px solid var(--border);
+  border-radius:24px;padding:26px;box-shadow:0 18px 52px rgba(0,0,0,.26)
+}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.pill{font-size:12px;font-weight:800;border:1px solid var(--border);color:var(--muted);padding:6px 10px;border-radius:99px}
+.pill.skill{color:#d9cfff;background:rgba(139,92,246,.10);border-color:rgba(139,92,246,.25)}
+.counter{margin-left:auto}
+.screen-title{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900;margin-bottom:13px}
+.main-text{font-size:clamp(22px,3.2vw,34px);line-height:1.35;font-weight:850;min-height:210px;display:flex;align-items:center;white-space:pre-line}
+.answer-text{
+  font-size:clamp(20px,2.7vw,29px);line-height:1.45;font-weight:760;
+  min-height:210px;display:flex;align-items:center;white-space:pre-line
+}
+.primary-row{display:flex;justify-content:center;margin-top:18px}
+.btn{
+  border-radius:14px;min-height:50px;padding:11px 18px;cursor:pointer;font-weight:900;border:1px solid var(--border)
+}
+.reveal{background:var(--violet);border-color:var(--violet);color:white;min-width:220px}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px}
+.ghost{background:transparent;color:var(--muted)}
+.ghost:hover{color:white;border-color:#4b6085}
+.rating{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:18px}
+.yes{background:rgba(109,222,135,.13);border-color:rgba(109,222,135,.45);color:#baf5c7}
+.partial{background:rgba(255,200,87,.13);border-color:rgba(255,200,87,.48);color:#ffe09a}
+.no{background:rgba(255,116,116,.13);border-color:rgba(255,116,116,.45);color:#ffc0c0}
+.issue-box{margin-top:16px;padding:16px;border-radius:15px;border:1px solid var(--border);background:#111827}
+.issue-title{font-weight:850;margin-bottom:10px}
+.issue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.issue{
+  display:flex;align-items:center;gap:9px;min-height:43px;padding:9px 10px;border:1px solid var(--border);
+  border-radius:11px;color:#dbe5f3;background:#151d2d
+}
+.issue input{width:18px;height:18px}
+.save-issue{margin-top:12px;background:var(--cyan);border-color:var(--cyan);color:#061118;width:100%}
+.results{display:none}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.result{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:15px}
+.rhead{display:flex;justify-content:space-between;gap:10px}
+.rpct{font-size:24px;font-weight:950}
+.pass{color:var(--green)} .fail{color:var(--red)}
+.verdict{margin-top:14px;border:1px solid var(--border);border-radius:15px;padding:17px;font-size:19px;font-weight:900;line-height:1.45}
+.problem-list{margin-top:16px}
+.problem-list h3{margin-bottom:8px}
+.problem-list ul{line-height:1.55;color:#d9e3ef;padding-left:20px}
+.feedback-wrap{margin-top:22px}
+.feedback-topic{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:12px}
+.feedback-topic h3{margin:0 0 10px;font-size:18px}
+.feedback-section{margin-top:10px}
+.feedback-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:900;margin-bottom:4px}
+.feedback-text{line-height:1.5;color:#e8eef7}
+.recommend{margin-top:10px;padding:10px 12px;border-radius:12px;background:#111827;border:1px solid var(--border);line-height:1.45}
+.issue-summary{margin-top:18px;background:#111827;border:1px solid var(--border);border-radius:15px;padding:15px}
+.issue-summary ul{margin:8px 0 0;padding-left:20px;line-height:1.55}
+.hidden{display:none!important}
+@media(max-width:720px){
+  .header{flex-direction:column}.stats{grid-template-columns:repeat(2,1fr)}
+  .rating{grid-template-columns:1fr}.issue-grid{grid-template-columns:1fr}
+  .main-text,.answer-text{min-height:170px}.result-grid{grid-template-columns:1fr}
+}
+
+.start-screen{max-width:980px;margin:0 auto}
+.start-title{font-size:clamp(30px,5vw,54px);line-height:1.05;margin:8px 0 10px}
+.start-sub{color:var(--muted);font-size:16px;line-height:1.55;margin-bottom:24px}
+.section-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;min-height:190px}
+.section-card.active-section{grid-column:span 2}
+.section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}
+.section-name{font-size:20px;font-weight:800}
+.section-count{font-size:12px;color:var(--muted)}
+.topic-choice{display:flex;align-items:center;gap:10px;padding:11px 12px;margin:8px 0;border:1px solid var(--border);border-radius:14px;cursor:pointer;background:rgba(255,255,255,.025)}
+.topic-choice:hover{border-color:rgba(124,92,255,.65)}
+.topic-choice input{width:18px;height:18px;accent-color:#7c5cff}
+.empty-section{color:var(--muted);padding:18px 0 4px;line-height:1.5}
+.start-actions{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:20px;flex-wrap:wrap}
+.select-all{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:11px 14px;cursor:pointer}
+.start-btn{border:0;border-radius:14px;padding:13px 20px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#7c5cff,#49b8ff);color:white}
+.start-btn:disabled{opacity:.4;cursor:not-allowed}
+.selection-note{color:var(--muted);font-size:13px}
+#quizApp.hidden,#startScreen.hidden{display:none!important}
+@media(max-width:800px){.section-grid{grid-template-columns:1fr}.section-card.active-section{grid-column:span 1}}
+
+.result-row{display:flex;justify-content:space-between;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:13px 15px;margin-top:9px}
+.weak{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:12px 14px;margin-top:8px;line-height:1.45}
+.start-screen{padding-top:8px}
 </style>
 </head>
 <body>
-<div class="wrap">
-<div class="eyebrow">ЦТ · диагностический блиц</div>
-<h1>Выбери блиц</h1>
-<div class="sub">Короткая диагностика по ключевым навыкам общей химии. Преподаватель задаёт вопрос, ученик отвечает устно, после чего фиксируется результат и причина ошибки.</div>
-<div class="grid">
-<a class="card" href="blitz2.html">
-<span class="num">02</span>
-<h2>Блиц №2 · Общая химия</h2>
-<p>Строение атома · Периодический закон · Химическая связь и строение вещества · ОВР.</p>
-<span class="badge">Открыть блиц →</span>
-</a>
+<div class="app">
+  <section id="startScreen" class="start-screen">
+    <div class="eyebrow">ЦТ · конструктор зачёта</div>
+    <h1 class="start-title">Собери зачёт</h1>
+    <div class="start-sub">Выбери одну или несколько тем. В зачёт попадут все карточки выбранных тем.</div>
+
+    <div id="sectionGrid" class="section-grid"></div>
+
+    <div class="start-actions">
+      <div>
+        <button id="selectAll" class="select-all" type="button">Выбрать все темы</button>
+        <span id="selectionNote" class="selection-note"></span>
+      </div>
+      <button id="startBtn" class="start-btn" type="button" disabled>Начать зачёт →</button>
+    </div>
+  </section>
+
+  <div id="quizApp" class="hidden">
+    <div class="header">
+      <div>
+        <div class="eyebrow">ЦТ · зачёт</div>
+        <h1>Химия</h1>
+        <div class="sub">Вопрос → краткий ответ → оценка преподавателя. «Частично» = 0,5 балла. Зачёт сдан при результате ≥80% по каждой выбранной теме.</div>
+      </div>
+      <div class="badge">Живой зачёт</div>
+    </div>
+
+    <div id="stats" class="stats"></div>
+    <div class="progress-shell"><div id="progress" class="progress"></div></div>
+    <div id="topicNav" class="topic-nav" aria-label="Выбранные темы"></div>
+
+    <section id="quiz" class="card">
+      <div id="questionScreen">
+        <div class="meta">
+          <span id="topic" class="pill"></span>
+          <span id="skill" class="pill skill"></span>
+          <span id="count" class="pill counter"></span>
+        </div>
+        <div class="screen-title">Вопрос</div>
+        <div id="question" class="main-text"></div>
+        <div class="primary-row"><button id="showAnswer" class="btn reveal">Показать краткий ответ →</button></div>
+      </div>
+
+      <div id="answerScreen" class="hidden">
+        <div class="meta">
+          <span id="topic2" class="pill"></span>
+          <span id="skill2" class="pill skill"></span>
+          <span id="count2" class="pill counter"></span>
+        </div>
+        <div class="screen-title">Краткий ответ</div>
+        <div id="answer" class="answer-text"></div>
+        <div class="screen-title">Оценка преподавателя</div>
+        <div class="rating">
+          <button class="btn yes rate" data-score="1">✓ Да</button>
+          <button class="btn partial rate" data-score="0.5">◐ Частично верно</button>
+          <button class="btn no rate" data-score="0">✕ Нет</button>
+        </div>
+        <div id="issueBox" class="issue-box hidden">
+          <div class="issue-title">Что было проблемой?</div>
+          <div class="issue-grid">
+            <label class="issue"><input type="checkbox" value="Не знает правило"> Не знает правило</label>
+            <label class="issue"><input type="checkbox" value="Не умеет применить"> Не умеет применить</label>
+            <label class="issue"><input type="checkbox" value="Ошибка в расчёте / знаке"> Ошибка в расчёте / знаке</label>
+            <label class="issue"><input type="checkbox" value="Невнимательность"> Невнимательность</label>
+            <label class="issue"><input type="checkbox" value="Терминология / формулировка"> Терминология / формулировка</label>
+            <label class="issue"><input type="checkbox" value="Другое"> Другое</label>
+          </div>
+          <button id="saveIssue" class="btn save-issue">Сохранить и дальше →</button>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button id="back" class="btn ghost">← Назад</button>
+        <button id="skip" class="btn ghost">Пропустить</button>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="card hidden">
+      <div class="screen-title">Итог</div>
+      <h2>Результат зачёта</h2>
+      <div id="resultSummary"></div>
+      <div id="weakList" class="problem-list"></div>
+      <div class="primary-row"><button id="restart" class="btn reveal">Новый зачёт</button></div>
+    </section>
+  </div>
 </div>
-<div class="note">Следующие варианты блица можно будет добавлять сюда отдельными карточками — с теми же компетенциями, но новыми примерами.</div>
-</div>
-</body>
-</html>
+
+<script src="topics.js"></script>
+<script>
+const ALL_Q = window.ZACHET_DATA || [];
+const GENERAL_TOPICS = (window.ZACHET_SECTIONS||[]).flatMap(s=>s.topics.map(t=>t.title));
+const $=id=>document.getElementById(id);
+let Q=[], topics=[], idx=0, stage="q", results=[], issues=[], pendingScore=null;
+
+function buildStart(){
+  $("sectionGrid").innerHTML=(window.ZACHET_SECTIONS||[]).map((sec,i)=>{
+    const body=sec.topics.length ? sec.topics.map(topic=>{
+      const n=ALL_Q.filter(q=>q[0]===topic.title).length;
+      return `<label class="topic-choice"><input type="checkbox" class="topic-check" value="${topic.title}"> <span><b>${topic.title}</b><br><small>${n} карточек</small></span></label>`;
+    }).join("") : `<div class="empty-section">Темы пока не добавлены.</div>`;
+    return `<div class="section-card ${i===0?"active-section":""}">
+      <div class="section-head"><div><div class="section-name">${sec.title}</div><div class="section-count">${sec.topics.length} тем</div></div></div>${body}
+    </div>`;
+  }).join("");
+  document.querySelectorAll(".topic-check").forEach(x=>x.addEventListener("change",updateStart));
+  updateStart();
+}
+function selected(){return [...document.querySelectorAll(".topic-check:checked")].map(x=>x.value)}
+function updateStart(){
+  const s=selected();
+  $("startBtn").disabled=!s.length;
+  $("selectionNote").textContent=s.length?`Выбрано тем: ${s.length}`:"";
+  $("selectAll").textContent=s.length===GENERAL_TOPICS.length?"Снять выбор":"Выбрать все темы";
+}
+$("selectAll").addEventListener("click",()=>{
+  const checks=[...document.querySelectorAll(".topic-check")];
+  const all=checks.every(x=>x.checked);
+  checks.forEach(x=>x.checked=!all); updateStart();
+});
+$("startBtn").addEventListener("click",()=>{
+  topics=selected();
+  Q=ALL_Q.filter(q=>topics.includes(q[0]));
+  idx=0;stage="q";results=Array(Q.length).fill(null);issues=Array(Q.length).fill(null);
+  $("startScreen").classList.add("hidden");$("quizApp").classList.remove("hidden");
+  $("resultScreen").classList.add("hidden");$("quiz").classList.remove("hidden");
+  buildTopicNav();render();
+});
+function buildTopicNav(){
+  $("topicNav").innerHTML='<span class="topic-nav-label">Темы:</span>'+topics.map((t,i)=>`<button type="button" class="topic-jump" data-topic="${t}">${String(i+1).padStart(2,"0")} · ${t}</button>`).join("");
+  document.querySelectorAll(".topic-jump").forEach(btn=>btn.addEventListener("click",()=>{
+    const j=Q.findIndex((q,i)=>q[0]===btn.dataset.topic && results[i]===null);
+    const any=Q.findIndex(q=>q[0]===btn.dataset.topic);
+    idx=j>=0?j:any;stage="q";render();
+  }));
+}
+function pctTopic(t){
+ const ids=Q.map((x,i)=>x[0]===t?i:-1).filter(i=>i>=0), done=ids.filter(i=>results[i]!==null);
+ const score=done.reduce((s,i)=>s+(results[i]??0),0);
+ return {score,max:ids.length,pct:ids.length?Math.round(score/ids.length*100):0,done:done.length};
+}
+function renderStats(){
+ $("stats").innerHTML=topics.map(t=>{const p=pctTopic(t);return `<div class="stat"><div class="stat-name">${t}</div><div class="stat-score">${p.score}/${p.max} · ${p.pct}%</div></div>`}).join("");
+}
+function render(){
+ if(idx>=Q.length){showResults();return}
+ const q=Q[idx];
+ ["topic","topic2"].forEach(id=>$(id).textContent=q[0]);["skill","skill2"].forEach(id=>$(id).textContent=q[1]);
+ ["count","count2"].forEach(id=>$(id).textContent=(idx+1)+" / "+Q.length);
+ $("question").textContent=q[2];$("answer").textContent=q[3];$("progress").style.width=(idx/Q.length*100)+"%";
+ $("back").disabled=idx===0;$("issueBox").classList.add("hidden");document.querySelectorAll(".issue input").forEach(x=>x.checked=false);pendingScore=null;
+ document.querySelectorAll(".topic-jump").forEach(b=>b.classList.toggle("active",b.dataset.topic===q[0]));
+ $("questionScreen").classList.toggle("hidden",stage!=="q");$("answerScreen").classList.toggle("hidden",stage==="q");renderStats();
+}
+function next(){idx++;stage="q";render()}
+function rate(score){if(score===1){results[idx]=1;issues[idx]=[];next()}else{pendingScore=score;$("issueBox").classList.remove("hidden")}}
+$("showAnswer").addEventListener("click",()=>{stage="a";render()});
+document.querySelectorAll(".rate").forEach(btn=>btn.addEventListener("click",()=>rate(Number(btn.dataset.score))));
+$("saveIssue").addEventListener("click",()=>{if(pendingScore===null)return;results[idx]=pendingScore;issues[idx]=[...document.querySelectorAll(".issue input:checked")].map(x=>x.value);next()});
+$("skip").addEventListener("click",()=>{results[idx]=0;issues[idx]=["Пропущено"];next()});
+$("back").addEventListener("click",()=>{if(idx>0){idx--;stage="q";render()}});
+function showResults(){
+ $("quiz").classList.add("hidden");$("resultScreen").classList.remove("hidden");$("progress").style.width="100%";
+ const rows=topics.map(t=>[t,pctTopic(t)]), all=rows.every(x=>x[1].pct>=80);
+ $("resultSummary").innerHTML=`<div class="verdict ${all?"pass":"fail"}">${all?"✓ ЗАЧЁТ СДАН — каждая выбранная тема ≥80%.":"✕ ЗАЧЁТ НЕ СДАН — есть тема ниже 80%."}</div>`+
+ rows.map(([t,p])=>`<div class="result-row"><b>${t}</b><span>${p.score}/${p.max} · ${p.pct}%</span></div>`).join("");
+ const weak=Q.map((q,i)=>({q,i})).filter(x=>results[x.i]!==null&&results[x.i]<1);
+ $("weakList").innerHTML=weak.length?'<h3>Что повторить</h3>'+weak.map(x=>`<div class="weak"><b>${x.q[0]} · ${x.q[1]}</b><br>${(issues[x.i]||[]).join(", ")||"Частичный ответ"}</div>`).join(""):'<div class="weak"><b>Ошибок нет.</b></div>';
+ renderStats();
+}
+$("restart").addEventListener("click",()=>{
+ $("quizApp").classList.add("hidden");$("startScreen").classList.remove("hidden");
+ $("resultScreen").classList.add("hidden");$("quiz").classList.remove("hidden");
+});
+buildStart();
+</script>
+</body></html>
