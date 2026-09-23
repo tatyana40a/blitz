@@ -11,5 +11,5 @@ window.ZACHET_SECTIONS = [
  {title:"Органическая химия", topics:[]}
 ];
 window.ZACHET_SECTIONS.forEach(s=>s.topics.forEach(t=>{
- document.write('<script src="'+t.file+'"><\\/script>');
+ document.write('<script src="'+t.file+'"><\/script>');
 }));
