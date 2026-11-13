@@ -8,6 +8,31 @@ window.ZACHET_SECTIONS=[
         "file": "topics/basic-reactions.js"
       },
       {
+        "id": "oxides",
+        "title": "Оксиды",
+        "file": "topics/oxides.js"
+      },
+      {
+        "id": "acids",
+        "title": "Кислоты",
+        "file": "topics/acids.js"
+      },
+      {
+        "id": "bases",
+        "title": "Основания",
+        "file": "topics/bases.js"
+      },
+      {
+        "id": "salts",
+        "title": "Соли",
+        "file": "topics/salts.js"
+      },
+      {
+        "id": "amphoterism",
+        "title": "Амфотерность",
+        "file": "topics/amphoterism.js"
+      },
+      {
         "id": "atomic-structure",
         "title": "Строение атома",
         "file": "topics/atomic-structure.js"
