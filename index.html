@@ -210,7 +210,7 @@ h1{margin:5px 0 5px;font-size:clamp(26px,4vw,40px)}
   </div>
 </div>
 
-<script src="topics.js?v=4"></script>
+<script src="topics.js?v=6"></script>
 <script>
 let ALL_Q = [];
 let GENERAL_TOPICS = [];
@@ -239,7 +239,7 @@ function buildStart(){
 function loadScript(src){
   return new Promise((resolve,reject)=>{
     const s=document.createElement("script");
-    s.src=src+(src.includes("?")?"&":"?")+"v=4";
+    s.src=src+(src.includes("?")?"&":"?")+"v=6";
     s.onload=resolve; s.onerror=reject; document.head.appendChild(s);
   });
 }
